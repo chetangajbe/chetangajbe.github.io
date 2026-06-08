@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Chetan Gajbe — SailPoint Developer & IAM/IGA Engineer</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#05060f;--bg2:#0a0c1a;--bg3:#0f1224;--bg4:#141830;
+  --accent:#3b82f6;--accent2:#60a5fa;--accent3:#1d4ed8;
+  --green:#00e5a0;--green2:rgba(0,229,160,0.12);
+  --purple:#8b5cf6;--purple2:rgba(139,92,246,0.12);
+  --text:#e8eaf6;--muted:#7986cb;--muted2:#5c6bc0;
+  --border:rgba(59,130,246,0.12);--border2:rgba(59,130,246,0.35);
+  --border3:rgba(0,229,160,0.25);
+  --ff:'Syne',sans-serif;--fm:'DM Mono',monospace;--fb:'Inter',sans-serif;
+  --glow:0 0 30px rgba(59,130,246,0.2);
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--fb);overflow-x:hidden;}
+
+
+
+/* CANVAS */
+#bgCanvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
+
+/* SCANLINES overlay */
+body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.04) 2px,rgba(0,0,0,0.04) 4px);pointer-events:none;z-index:1;animation:scanmove 8s linear infinite}
+@keyframes scanmove{to{background-position:0 100px}}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:500;height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 5vw;background:rgba(5,6,15,0.9);backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:var(--ff);font-weight:800;font-size:1.15rem;color:var(--accent2);letter-spacing:-0.02em;display:flex;align-items:center;gap:8px}
+.nav-logo-icon{width:28px;height:28px;border:1px solid var(--accent);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:0.7rem;color:var(--accent);font-family:var(--fm);animation:border-pulse 3s infinite}
+@keyframes border-pulse{0%,100%{border-color:rgba(59,130,246,0.4)}50%{border-color:rgba(59,130,246,0.9);box-shadow:0 0 10px rgba(59,130,246,0.3)}}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:0.75rem;font-family:var(--fm);letter-spacing:0.08em;text-transform:uppercase;transition:color .2s;position:relative;padding:4px 0}
+.nav-links a:hover{color:var(--accent2)}
+.nav-links a::after{content:'';position:absolute;bottom:0;left:0;width:0;height:1px;background:var(--accent2);transition:width .3s}
+.nav-links a:hover::after{width:100%}
+.nav-status{display:flex;align-items:center;gap:8px;font-family:var(--fm);font-size:0.68rem;color:var(--green);padding:4px 12px;border:1px solid rgba(0,229,160,0.2);border-radius:20px;background:rgba(0,229,160,0.06)}
+.nav-status-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(0,229,160,0.4)}50%{opacity:0.6;box-shadow:0 0 0 4px rgba(0,229,160,0)}}
+
+/* CONTENT */
+.content{position:relative;z-index:10}
+
+/* HERO */
+.hero-section{min-height:100vh;display:flex;align-items:center;padding:64px 5vw 0;max-width:1300px;margin:0 auto}
+.hero-left{flex:1;max-width:560px}
+.hero-right{flex:1;display:flex;justify-content:center;align-items:center}
+
+/* HERO text */
+.hero-eyebrow{font-family:var(--fm);font-size:0.72rem;color:var(--accent2);letter-spacing:0.18em;text-transform:uppercase;margin-bottom:1.2rem;display:flex;align-items:center;gap:10px;opacity:0;animation:fadeup .8s .2s forwards}
+.hero-eyebrow::before{content:'';width:20px;height:1px;background:var(--accent2)}
+.hero-name{font-family:var(--ff);font-weight:800;font-size:clamp(3.2rem,6vw,6rem);line-height:.92;letter-spacing:-0.03em;margin-bottom:1rem;opacity:0;animation:fadeup .9s .4s forwards}
+.hero-name .line1{display:block;color:var(--text)}
+.hero-name .line2{display:block;color:var(--accent2);position:relative}
+.hero-name .line2::after{content:'_';animation:cursor-blink .8s step-end infinite;color:var(--green)}
+@keyframes cursor-blink{0%,100%{opacity:1}50%{opacity:0}}
+.hero-title{font-family:var(--fm);font-size:0.9rem;color:var(--muted);margin-bottom:1.8rem;line-height:1.8;opacity:0;animation:fadeup .8s .6s forwards}
+.hero-title .hl{color:var(--accent2)}
+.hero-cta{display:flex;gap:1rem;flex-wrap:wrap;opacity:0;animation:fadeup .8s .8s forwards}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:.7rem 1.6rem;border-radius:6px;font-family:var(--fm);font-size:0.78rem;letter-spacing:.06em;text-decoration:none;transition:all .25s;border:none;cursor:pointer;position:relative;overflow:hidden}
+.btn-p{background:var(--accent);color:#fff;font-weight:500}
+.btn-p:hover{background:var(--accent2);transform:translateY(-2px);box-shadow:0 8px 24px rgba(59,130,246,.4)}
+.btn-o{background:transparent;color:var(--accent2);border:1px solid var(--border2)}
+.btn-o:hover{background:rgba(59,130,246,.08);transform:translateY(-2px)}
+.hero-tags{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:1.5rem;opacity:0;animation:fadeup .8s 1s forwards}
+.tag{font-family:var(--fm);font-size:.65rem;padding:3px 10px;border-radius:3px;background:rgba(59,130,246,.08);color:var(--accent2);border:1px solid var(--border2);transition:all .2s}
+.tag:hover{background:rgba(59,130,246,.18);transform:scale(1.05)}
+.tag.g{background:rgba(0,229,160,.08);color:var(--green);border-color:rgba(0,229,160,.25)}
+.tag.p{background:rgba(139,92,246,.08);color:var(--purple);border-color:rgba(139,92,246,.25)}
+
+@keyframes fadeup{to{opacity:1;transform:translateY(0)}}
+.hero-eyebrow,.hero-name,.hero-title,.hero-cta,.hero-tags{transform:translateY(18px)}
+
+/* ── IAM IDENTITY DIAGRAM (hero right) ── */
+.iam-diagram{position:relative;width:420px;height:420px}
+.iam-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:110px;height:110px;border-radius:50%;background:var(--bg2);border:2px solid var(--accent);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10;box-shadow:0 0 30px rgba(59,130,246,.3);animation:center-pulse 3s ease-in-out infinite}
+@keyframes center-pulse{0%,100%{box-shadow:0 0 20px rgba(59,130,246,.2)}50%{box-shadow:0 0 50px rgba(59,130,246,.5),0 0 80px rgba(59,130,246,.15)}}
+.iam-center-label{font-family:var(--fm);font-size:.6rem;color:var(--accent2);text-align:center;letter-spacing:.08em;margin-top:4px}
+.iam-center-logo{font-family:var(--ff);font-weight:800;font-size:1.3rem;color:var(--accent2)}
+.orbit-ring{position:absolute;top:50%;left:50%;border-radius:50%;border:1px dashed rgba(59,130,246,.2);transform:translate(-50%,-50%)}
+.orbit-ring.r1{width:200px;height:200px;animation:spin 20s linear infinite}
+.orbit-ring.r2{width:300px;height:300px;animation:spin 30s linear infinite reverse}
+.orbit-ring.r3{width:400px;height:400px;animation:spin 40s linear infinite}
+@keyframes spin{to{transform:translate(-50%,-50%) rotate(360deg)}}
+
+/* IAM nodes around the center */
+.iam-node{position:absolute;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:default}
+.iam-node-box{width:72px;height:56px;border-radius:8px;background:var(--bg2);border:1px solid var(--border2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;transition:all .3s;font-size:.55rem;font-family:var(--fm);color:var(--accent2);letter-spacing:.06em;text-align:center;padding:4px;position:relative;overflow:hidden}
+.iam-node-box::before{content:'';position:absolute;inset:0;background:rgba(59,130,246,.05);opacity:0;transition:opacity .3s}
+.iam-node-box:hover{border-color:var(--accent2);box-shadow:0 0 20px rgba(59,130,246,.3)}
+.iam-node-box:hover::before{opacity:1}
+.iam-node-icon{font-size:1.2rem}
+.iam-node-line{position:absolute;top:50%;left:50%;transform-origin:0 0;height:1px;background:linear-gradient(90deg,var(--accent),transparent);opacity:.3;pointer-events:none}
+
+/* connector lines using SVG */
+.iam-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+
+/* floating IAM keywords */
+.float-kw{position:absolute;font-family:var(--fm);font-size:.58rem;color:rgba(59,130,246,.4);letter-spacing:.1em;animation:float-kw 6s ease-in-out infinite;user-select:none;pointer-events:none}
+@keyframes float-kw{0%,100%{transform:translateY(0);opacity:.3}50%{transform:translateY(-8px);opacity:.7}}
+
+/* DATA FLOW animation */
+.data-packet{position:absolute;width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:travel 3s linear infinite;opacity:0}
+@keyframes travel{0%{opacity:0}10%{opacity:1}90%{opacity:1}100%{opacity:0}}
+
+/* STATS */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:12px;overflow:hidden;max-width:1300px;margin:0 auto;position:relative;z-index:10}
+.stat-cell{background:var(--bg2);padding:1.8rem 1.5rem;text-align:center;transition:background .2s;position:relative;overflow:hidden}
+.stat-cell::before{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--accent);transform:scaleX(0);transition:transform .3s}
+.stat-cell:hover{background:var(--bg3)}
+.stat-cell:hover::before{transform:scaleX(1)}
+.stat-n{font-family:var(--ff);font-size:2.4rem;font-weight:800;color:var(--accent2);display:block;line-height:1}
+.stat-l{font-family:var(--fm);font-size:.65rem;color:var(--muted);margin-top:6px;text-transform:uppercase;letter-spacing:.08em}
+
+/* SECTION */
+.section{padding:90px 5vw 50px;max-width:1300px;margin:0 auto;position:relative;z-index:10}
+.s-label{font-family:var(--fm);font-size:.7rem;color:var(--accent2);text-transform:uppercase;letter-spacing:.18em;margin-bottom:.5rem;display:flex;align-items:center;gap:10px}
+.s-label::before{content:'';width:20px;height:1px;background:var(--accent2)}
+.s-title{font-family:var(--ff);font-size:clamp(2rem,4vw,3rem);font-weight:800;letter-spacing:-.02em;margin-bottom:2.5rem;line-height:1.1}
+.s-title em{color:var(--accent2);font-style:normal}
+.s-title .g{color:var(--green)}
+.divider{height:1px;background:var(--border);margin:0 5vw;position:relative;z-index:10}
+
+/* ABOUT */
+.about-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:3.5rem;align-items:start}
+.about-text p{color:var(--muted);font-size:.95rem;line-height:1.85;margin-bottom:1rem}
+.about-text strong{color:var(--text)}
+.about-text .hl{color:var(--accent2)}
+
+/* TERMINAL CARD */
+.terminal{background:var(--bg2);border:1px solid var(--border2);border-radius:12px;overflow:hidden}
+.terminal-bar{background:var(--bg3);border-bottom:1px solid var(--border);padding:.6rem 1rem;display:flex;align-items:center;gap:6px}
+.t-dot{width:10px;height:10px;border-radius:50%}
+.t-dot.r{background:#ff5f57}.t-dot.y{background:#febc2e}.t-dot.g{background:#28c840}
+.terminal-title{font-family:var(--fm);font-size:.68rem;color:var(--muted);margin-left:auto;margin-right:auto;letter-spacing:.06em}
+.terminal-body{padding:1.25rem 1.25rem;font-family:var(--fm);font-size:.8rem;line-height:2}
+.t-prompt{color:var(--muted2)}
+.t-cmd{color:var(--text)}
+.t-out{color:var(--green)}
+.t-key{color:var(--accent2)}
+.t-val{color:var(--muted)}
+.t-comment{color:rgba(99,120,190,.5)}
+
+/* SKILL BARS */
+.skill-bars{margin-top:1.5rem}
+.sbrow{display:flex;align-items:center;gap:1rem;margin-bottom:.9rem}
+.sb-label{font-family:var(--fm);font-size:.68rem;color:var(--muted);width:130px;flex-shrink:0}
+.sb-track{flex:1;height:3px;background:var(--bg4);border-radius:2px;overflow:hidden;position:relative}
+.sb-fill{height:100%;border-radius:2px;width:0;transition:width 1.6s cubic-bezier(.16,1,.3,1);position:relative}
+.sb-fill.b{background:var(--accent)}
+.sb-fill.g{background:var(--green)}
+.sb-fill.p{background:var(--purple)}
+.sb-fill::after{content:'';position:absolute;right:0;top:50%;transform:translateY(-50%);width:8px;height:8px;border-radius:50%;background:inherit;box-shadow:0 0 8px currentColor}
+.sb-pct{font-family:var(--fm);font-size:.63rem;color:var(--accent2);width:32px;text-align:right}
+
+/* SAILPOINT WORKFLOW VISUALIZER */
+.workflow-wrap{margin-top:2rem;background:var(--bg2);border:1px solid var(--border2);border-radius:12px;overflow:hidden}
+.workflow-header{background:var(--bg3);border-bottom:1px solid var(--border);padding:.75rem 1.25rem;display:flex;align-items:center;justify-content:space-between}
+.workflow-title{font-family:var(--fm);font-size:.7rem;color:var(--accent2);letter-spacing:.08em}
+.workflow-badge{font-family:var(--fm);font-size:.6rem;padding:2px 8px;border-radius:3px;background:rgba(0,229,160,.1);color:var(--green);border:1px solid rgba(0,229,160,.2)}
+.workflow-body{padding:1.25rem}
+.wf-steps{display:flex;align-items:center;gap:0;flex-wrap:nowrap;overflow-x:auto}
+.wf-step{flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:6px}
+.wf-node{width:80px;height:52px;border-radius:6px;background:var(--bg3);border:1px solid var(--border2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-family:var(--fm);font-size:.55rem;color:var(--accent2);text-align:center;padding:4px;transition:all .3s;position:relative}
+.wf-node.active{border-color:var(--accent2);box-shadow:0 0 14px rgba(59,130,246,.4);animation:wf-glow 2s infinite}
+.wf-node.done{border-color:rgba(0,229,160,.4);background:rgba(0,229,160,.06)}
+.wf-node.done .wf-icon{color:var(--green)}
+@keyframes wf-glow{0%,100%{box-shadow:0 0 8px rgba(59,130,246,.3)}50%{box-shadow:0 0 20px rgba(59,130,246,.6)}}
+.wf-icon{font-size:1.1rem}
+.wf-arrow{width:28px;height:2px;background:var(--border2);position:relative;flex-shrink:0;margin-bottom:14px}
+.wf-arrow::after{content:'';position:absolute;right:-4px;top:-3px;border:4px solid transparent;border-left-color:var(--accent)}
+.wf-arrow .packet{position:absolute;width:5px;height:5px;border-radius:50%;background:var(--green);top:-1.5px;left:0;animation:pkt 2s linear infinite;box-shadow:0 0 6px var(--green)}
+@keyframes pkt{0%{left:0;opacity:0}10%{opacity:1}90%{opacity:1}100%{left:28px;opacity:0}}
+
+/* SKILLS GRID */
+.skills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:.9rem}
+.skill-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:1.4rem;transition:all .3s;position:relative;overflow:hidden;cursor:default}
+.skill-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform .4s}
+.skill-card:hover{border-color:var(--border2);transform:translateY(-4px);box-shadow:var(--glow)}
+.skill-card:hover::before{transform:scaleX(1)}
+.skill-card.g::before{background:var(--green)}
+.skill-card.g:hover{border-color:rgba(0,229,160,.3);box-shadow:0 0 30px rgba(0,229,160,.15)}
+.skill-card.p::before{background:var(--purple)}
+.skill-card.p:hover{border-color:rgba(139,92,246,.3);box-shadow:0 0 30px rgba(139,92,246,.15)}
+.sk-icon{font-size:1.5rem;margin-bottom:.7rem;display:block}
+.sk-title{font-family:var(--ff);font-weight:700;font-size:.92rem;margin-bottom:.65rem;color:var(--text)}
+.sk-tags{display:flex;flex-wrap:wrap;gap:4px}
+.sk-tag{font-family:var(--fm);font-size:.62rem;padding:2px 7px;border-radius:3px;background:var(--bg3);color:var(--muted);border:1px solid var(--border);transition:all .2s}
+.sk-tag:hover{color:var(--accent2);border-color:var(--border2)}
+.sk-tag.g:hover{color:var(--green);border-color:rgba(0,229,160,.3)}
+
+/* EXPERIENCE */
+.exp-timeline{position:relative;padding-left:2rem}
+.exp-timeline::before{content:'';position:absolute;left:0;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,var(--accent),transparent)}
+.exp-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:2rem 2.5rem;margin-bottom:1.5rem;position:relative;transition:all .3s;overflow:hidden}
+.exp-card::before{content:'';position:absolute;left:-2.5rem;top:2.5rem;width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--accent)}
+.exp-card:hover{border-color:var(--border2);box-shadow:var(--glow)}
+.exp-head{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;margin-bottom:1.5rem;flex-wrap:wrap}
+.exp-title{font-family:var(--ff);font-weight:700;font-size:1.2rem}
+.exp-co{color:var(--accent2);font-size:.88rem;margin-top:3px}
+.exp-period{font-family:var(--fm);font-size:.68rem;color:var(--muted);padding:4px 12px;border:1px solid var(--border);border-radius:20px;background:var(--bg3)}
+.exp-bullets{list-style:none}
+.exp-bullets li{font-size:.86rem;color:var(--muted);padding:.42rem 0 .42rem 1.4rem;position:relative;line-height:1.65;border-bottom:1px solid rgba(255,255,255,.03)}
+.exp-bullets li:last-child{border:none}
+.exp-bullets li::before{content:'▸';position:absolute;left:0;color:var(--accent);font-size:.75rem;top:.5rem}
+.exp-bullets li strong{color:var(--text)}
+
+/* IMPACT CHIPS */
+.impact-row{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.25rem}
+.impact-chip{font-family:var(--fm);font-size:.65rem;padding:4px 10px;border-radius:20px;display:flex;align-items:center;gap:4px}
+.impact-chip.b{background:rgba(59,130,246,.1);color:var(--accent2);border:1px solid rgba(59,130,246,.2)}
+.impact-chip.g{background:rgba(0,229,160,.08);color:var(--green);border:1px solid rgba(0,229,160,.2)}
+.impact-chip.p{background:rgba(139,92,246,.1);color:var(--purple);border:1px solid rgba(139,92,246,.2)}
+
+/* PROJECTS */
+.proj-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.1rem}
+.proj-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.6rem;display:flex;flex-direction:column;gap:.8rem;transition:all .3s;position:relative;overflow:hidden}
+.proj-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--accent),transparent);transform:scaleX(0);transform-origin:left;transition:transform .4s}
+.proj-card:hover{border-color:var(--border2);transform:translateY(-5px);box-shadow:var(--glow)}
+.proj-card:hover::after{transform:scaleX(1)}
+.proj-type{font-family:var(--fm);font-size:.62rem;color:var(--accent2);letter-spacing:.12em;text-transform:uppercase}
+.proj-title{font-family:var(--ff);font-weight:700;font-size:1rem;line-height:1.3;color:var(--text)}
+.proj-desc{font-size:.83rem;color:var(--muted);line-height:1.65;flex:1}
+.proj-impact{font-family:var(--fm);font-size:.68rem;color:var(--green);padding:4px 10px;background:rgba(0,229,160,.08);border-radius:4px;display:inline-block;border:1px solid rgba(0,229,160,.2)}
+.proj-tech{display:flex;flex-wrap:wrap;gap:4px}
+.proj-tech span{font-family:var(--fm);font-size:.6rem;padding:2px 7px;border-radius:3px;background:var(--bg3);color:var(--muted);border:1px solid var(--border)}
+
+/* CERTS */
+.cert-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:.75rem}
+.cert-card{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:1rem 1.25rem;display:flex;align-items:flex-start;gap:.75rem;transition:all .2s}
+.cert-card:hover{border-color:var(--border2);transform:translateX(4px)}
+.cert-dot{width:8px;height:8px;border-radius:50%;margin-top:4px;flex-shrink:0}
+.cert-dot.done{background:var(--green);animation:cdot 2s infinite}
+.cert-dot.wip{background:#f59e0b;animation:cdot 2.5s infinite}
+@keyframes cdot{0%,100%{box-shadow:0 0 0 0 rgba(0,229,160,.5)}50%{box-shadow:0 0 0 5px transparent}}
+.cert-name{font-size:.81rem;color:var(--text);line-height:1.4}
+.cert-state{font-family:var(--fm);font-size:.62rem;color:var(--muted);margin-top:2px}
+
+/* CONTACT */
+.contact-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;max-width:700px}
+.con-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:1.25rem 1.5rem;display:flex;align-items:center;gap:1rem;text-decoration:none;color:var(--text);transition:all .25s}
+.con-card:hover{border-color:var(--border2);background:var(--bg3);transform:translateY(-3px);box-shadow:var(--glow)}
+.con-icon{font-size:1rem;width:36px;height:36px;display:flex;align-items:center;justify-content:center;background:rgba(59,130,246,.1);border-radius:7px;flex-shrink:0;border:1px solid var(--border2)}
+.con-l{font-family:var(--fm);font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.con-v{font-size:.82rem;margin-top:2px}
+
+/* reveal */
+.reveal{opacity:0;transform:translateY(28px);transition:all .7s cubic-bezier(.16,1,.3,1)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+/* footer */
+footer{text-align:center;padding:3rem 5vw;font-family:var(--fm);font-size:.68rem;color:var(--muted2);position:relative;z-index:10;border-top:1px solid var(--border)}
+
+/* hex grid bg element */
+.hex-grid{position:fixed;inset:0;z-index:0;opacity:.03;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='100'%3E%3Cpath d='M28 66L0 50V18L28 2l28 16v32z' fill='none' stroke='%233b82f6' stroke-width='1'/%3E%3Cpath d='M28 100L0 84V52l28-16 28 16v32z' fill='none' stroke='%233b82f6' stroke-width='1'/%3E%3C/svg%3E");background-size:56px 100px}
+
+@media(max-width:900px){.hero-section{flex-direction:column;padding-top:80px}.hero-right{margin-top:2rem}.iam-diagram{width:300px;height:300px}.stats-row{grid-template-columns:1fr 1fr}.about-grid{grid-template-columns:1fr}.contact-grid{grid-template-columns:1fr 1fr}.nav-links{gap:1.2rem}}
+</style>
+</head>
+<body>
+
+
+<canvas id="bgCanvas"></canvas>
+<div class="hex-grid"></div>
+
+<nav>
+  <div class="nav-logo">
+    <div class="nav-logo-icon">IAM</div>
+    CG.
+  </div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="nav-status"><div class="nav-status-dot"></div>Identity Secure</div>
+</nav>
+
+<div class="content">
+
+<!-- HERO -->
+<div style="max-width:1300px;margin:0 auto;padding:0 5vw">
+<section style="min-height:100vh;display:flex;align-items:center;padding-top:64px">
+  <div style="display:flex;gap:4rem;align-items:center;width:100%;flex-wrap:wrap">
+
+    <!-- LEFT -->
+    <div style="flex:1;min-width:300px">
+      <div class="hero-eyebrow">SailPoint Developer &nbsp;·&nbsp; IAM / IGA Engineer</div>
+      <h1 class="hero-name">
+        <span class="line1">Chetan</span>
+        <span class="line2">Gajbe</span>
+      </h1>
+      <p class="hero-title">
+        <span class="hl">Identity & Access Management</span> specialist securing
+        <span class="hl">5,000+ global identities</span> at Amgen India via
+        SailPoint IIQ &amp; ISC, BeanShell/Java, JML automation &amp; Agentic AI.
+      </p>
+      <div class="hero-cta">
+        <a href="#projects" class="btn btn-p">View Projects</a>
+        <a href="#contact" class="btn btn-o">Get In Touch</a>
+      </div>
+      <div class="hero-tags">
+        <span class="tag">SailPoint IIQ</span>
+        <span class="tag">SailPoint ISC</span>
+        <span class="tag g">Zero Trust</span>
+        <span class="tag g">JML Lifecycle</span>
+        <span class="tag p">LangChain AI</span>
+        <span class="tag p">BeanShell/Java</span>
+        <span class="tag">RBAC · PAM · SSO</span>
+        <span class="tag g">98.5% SLA</span>
+      </div>
+    </div>
+
+    <!-- RIGHT: IAM DIAGRAM -->
+    <div style="flex:1;display:flex;justify-content:center;min-width:300px">
+      <div class="iam-diagram" id="iamDiagram">
+        <!-- orbit rings -->
+        <div class="orbit-ring r1"></div>
+        <div class="orbit-ring r2"></div>
+        <div class="orbit-ring r3"></div>
+        <!-- center -->
+        <div class="iam-center">
+          <div class="iam-center-logo">SP</div>
+          <div class="iam-center-label">SAILPOINT<br/>IIQ / ISC</div>
+        </div>
+        <!-- connector SVG -->
+        <svg class="iam-svg" id="iamSvg"></svg>
+        <!-- nodes will be injected by JS -->
+      </div>
+    </div>
+
+  </div>
+</section>
+</div>
+
+<!-- STATS -->
+<div style="max-width:1300px;margin:0 auto;padding:0 5vw;position:relative;z-index:10">
+<div class="stats-row reveal">
+  <div class="stat-cell"><span class="stat-n count" data-t="2" data-s="+">0</span><span class="stat-l">Years at Amgen India</span></div>
+  <div class="stat-cell"><span class="stat-n count" data-t="5000" data-s="+">0</span><span class="stat-l">Global Identities Managed</span></div>
+  <div class="stat-cell"><span class="stat-n count" data-t="15" data-s="+">0</span><span class="stat-l">Apps Onboarded</span></div>
+  <div class="stat-cell"><span class="stat-n count" data-t="120" data-s="+">0</span><span class="stat-l">IAM Tickets / Month</span></div>
+</div>
+</div>
+
+<div class="divider" style="margin-top:60px"></div>
+
+<!-- ABOUT -->
+<section id="about" class="section">
+  <div class="s-label reveal">01 / About</div>
+  <h2 class="s-title reveal">The <em>Identity</em> Engineer</h2>
+  <div class="about-grid">
+    <div class="reveal">
+      <div class="about-text">
+        <p>I'm a <strong>SailPoint Developer &amp; IAM/IGA Engineer</strong> at <span class="hl">Amgen India</span>, where I architect the identity fabric for 5,000+ global employees across enterprise systems.</p>
+        <p>My core domain: <strong>SailPoint IdentityIQ (IIQ)</strong> and <strong>IdentityNow (ISC)</strong> — building BeanShell/Java rules, custom JDBC/Web Services connectors, JML workflows, role mining, and SOC/SOX-compliant access certifications.</p>
+        <p>I also operate at the frontier of <strong>Agentic AI + Security</strong>: a LangChain + Anthropic API agent I built auto-triages Microsoft Sentinel alerts, cutting analyst time by 35%.</p>
+        <p>B.E. Cyber Security, University of Mumbai · CGPA 7.32 · Graduated May 2024.</p>
+      </div>
+
+      <!-- SailPoint JML Workflow -->
+      <div class="workflow-wrap reveal" style="margin-top:1.5rem">
+        <div class="workflow-header">
+          <span class="workflow-title">⚙ SailPoint JML Lifecycle — Live Flow</span>
+          <span class="workflow-badge">● ACTIVE</span>
+        </div>
+        <div class="workflow-body">
+          <div class="wf-steps">
+            <div class="wf-step"><div class="wf-node done"><span class="wf-icon">👤</span>JOINER</div></div>
+            <div class="wf-arrow"><div class="packet"></div></div>
+            <div class="wf-step"><div class="wf-node done"><span class="wf-icon">🔐</span>PROVISION</div></div>
+            <div class="wf-arrow"><div class="packet" style="animation-delay:.8s"></div></div>
+            <div class="wf-step"><div class="wf-node active"><span class="wf-icon">🛡️</span>CERTIFY</div></div>
+            <div class="wf-arrow"><div class="packet" style="animation-delay:1.6s"></div></div>
+            <div class="wf-step"><div class="wf-node"><span class="wf-icon">🔄</span>MOVER</div></div>
+            <div class="wf-arrow"><div class="packet" style="animation-delay:2.4s"></div></div>
+            <div class="wf-step"><div class="wf-node"><span class="wf-icon">📋</span>REVIEW</div></div>
+            <div class="wf-arrow"><div class="packet" style="animation-delay:3.2s"></div></div>
+            <div class="wf-step"><div class="wf-node"><span class="wf-icon">🚪</span>LEAVER</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="reveal" style="transition-delay:.15s">
+      <!-- Terminal card -->
+      <div class="terminal">
+        <div class="terminal-bar">
+          <div class="t-dot r"></div><div class="t-dot y"></div><div class="t-dot g"></div>
+          <div class="terminal-title">iam-profile.sh</div>
+        </div>
+        <div class="terminal-body" id="terminalBody">
+          <div><span class="t-prompt">$ </span><span class="t-cmd" id="typedCmd"></span><span id="termCursor" style="display:inline-block;width:2px;height:1em;background:var(--accent2);vertical-align:middle;margin-left:1px;animation:cursor-blink .7s step-end infinite"></span></div>
+          <div id="termOutput" style="margin-top:8px;display:none">
+            <div><span class="t-comment"># Identity Engineer Profile</span></div>
+            <div><span class="t-key">name</span><span class="t-val">: "Chetan Gajbe"</span></div>
+            <div><span class="t-key">role</span><span class="t-val">: "SailPoint Dev & IAM/IGA Eng"</span></div>
+            <div><span class="t-key">location</span><span class="t-val">: "Hyderabad, India"</span></div>
+            <div><span class="t-key">company</span><span class="t-val">: "Amgen India"</span></div>
+            <div><span class="t-key">platform</span><span class="t-val">: ["IIQ","ISC","BeanShell"]</span></div>
+            <div><span class="t-key">sla</span><span class="t-val">: "98.5%"</span></div>
+            <div><span class="t-key">identities</span><span class="t-val">: 5000</span></div>
+            <div><span class="t-key">status</span><span class="t-out">: "open_to_opportunities"</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Skill bars -->
+      <div class="skill-bars reveal" style="margin-top:1.5rem;transition-delay:.2s">
+        <div class="sbrow"><span class="sb-label">SailPoint IIQ/ISC</span><div class="sb-track"><div class="sb-fill b" data-w="93"></div></div><span class="sb-pct">93%</span></div>
+        <div class="sbrow"><span class="sb-label">Java / BeanShell</span><div class="sb-track"><div class="sb-fill b" data-w="88"></div></div><span class="sb-pct">88%</span></div>
+        <div class="sbrow"><span class="sb-label">RBAC / Role Mining</span><div class="sb-track"><div class="sb-fill g" data-w="85"></div></div><span class="sb-pct">85%</span></div>
+        <div class="sbrow"><span class="sb-label">SIEM / KQL / Sentinel</span><div class="sb-track"><div class="sb-fill g" data-w="80"></div></div><span class="sb-pct">80%</span></div>
+        <div class="sbrow"><span class="sb-label">Agentic AI / LangChain</span><div class="sb-track"><div class="sb-fill p" data-w="76"></div></div><span class="sb-pct">76%</span></div>
+        <div class="sbrow"><span class="sb-label">Cloud / AWS / Docker</span><div class="sb-track"><div class="sb-fill p" data-w="70"></div></div><span class="sb-pct">70%</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SKILLS -->
+<section id="skills" class="section">
+  <div class="s-label reveal">02 / Skills</div>
+  <h2 class="s-title reveal"><em>Technical</em> Arsenal</h2>
+  <div class="skills-grid">
+    <div class="skill-card reveal"><span class="sk-icon">🛡️</span><div class="sk-title">SailPoint Development</div><div class="sk-tags"><span class="sk-tag">IIQ</span><span class="sk-tag">ISC / IdentityNow</span><span class="sk-tag">BeanShell</span><span class="sk-tag">Java Rules</span><span class="sk-tag">Workflow Dev</span><span class="sk-tag">JDBC Connectors</span><span class="sk-tag">Web Services</span><span class="sk-tag">Role Mining</span><span class="sk-tag">Authorization</span></div></div>
+    <div class="skill-card reveal" style="transition-delay:.05s"><span class="sk-icon">🔐</span><div class="sk-title">IAM / IGA</div><div class="sk-tags"><span class="sk-tag">RBAC</span><span class="sk-tag">JML Lifecycle</span><span class="sk-tag">PAM</span><span class="sk-tag">SSO</span><span class="sk-tag">MFA</span><span class="sk-tag">Active Directory</span><span class="sk-tag">Azure AD</span><span class="sk-tag">LDAP / OpenDJ</span><span class="sk-tag">ServiceNow</span></div></div>
+    <div class="skill-card g reveal" style="transition-delay:.1s"><span class="sk-icon">🤖</span><div class="sk-title">Agentic AI & LLMs</div><div class="sk-tags"><span class="sk-tag g">LangChain</span><span class="sk-tag g">OpenAI API</span><span class="sk-tag g">Anthropic API</span><span class="sk-tag g">RAG Pipelines</span><span class="sk-tag g">Prompt Eng.</span><span class="sk-tag g">AI Agents</span></div></div>
+    <div class="skill-card reveal" style="transition-delay:.15s"><span class="sk-icon">🔭</span><div class="sk-title">Security & SOC</div><div class="sk-tags"><span class="sk-tag">Microsoft Sentinel</span><span class="sk-tag">Splunk</span><span class="sk-tag">SIEM</span><span class="sk-tag">KQL</span><span class="sk-tag">SPL</span><span class="sk-tag">P1/P2 Incident</span><span class="sk-tag">RCA</span><span class="sk-tag">SOC Type II</span></div></div>
+    <div class="skill-card p reveal" style="transition-delay:.2s"><span class="sk-icon">💻</span><div class="sk-title">Programming</div><div class="sk-tags"><span class="sk-tag">Java</span><span class="sk-tag">Python</span><span class="sk-tag">JavaScript</span><span class="sk-tag">Go / Golang</span><span class="sk-tag">PowerShell</span><span class="sk-tag">Bash</span><span class="sk-tag">REST API</span><span class="sk-tag">gRPC</span><span class="sk-tag">SQL</span></div></div>
+    <div class="skill-card reveal" style="transition-delay:.25s"><span class="sk-icon">☁️</span><div class="sk-title">Cloud & DevOps</div><div class="sk-tags"><span class="sk-tag">AWS EC2/S3/IAM/Lambda</span><span class="sk-tag">Docker</span><span class="sk-tag">Kubernetes</span><span class="sk-tag">Terraform</span><span class="sk-tag">GitHub Actions</span><span class="sk-tag">CI/CD</span></div></div>
+    <div class="skill-card g reveal" style="transition-delay:.3s"><span class="sk-icon">📋</span><div class="sk-title">Compliance & Frameworks</div><div class="sk-tags"><span class="sk-tag g">NIST</span><span class="sk-tag g">ISO 27001</span><span class="sk-tag g">SOC2 Type II</span><span class="sk-tag g">SOX</span><span class="sk-tag g">Zero Trust</span></div></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- EXPERIENCE -->
+<section id="experience" class="section">
+  <div class="s-label reveal">03 / Experience</div>
+  <h2 class="s-title reveal">Work <em>History</em></h2>
+  <div class="exp-timeline">
+    <div class="exp-card reveal">
+      <div class="exp-head">
+        <div><div class="exp-title">SailPoint Developer & IAM/IGA Engineer</div><div class="exp-co">Amgen India · Hyderabad, India</div></div>
+        <div class="exp-period">June 2024 – Present</div>
+      </div>
+      <ul class="exp-bullets">
+        <li>Designed and developed <strong>10+ automated identity workflows</strong> for 5,000+ global identities using BeanShell/Java rules and REST/JDBC connectors. Maintained <strong>98.5% SLA</strong>, reduced provisioning errors by 25%.</li>
+        <li>Designed authorization concepts for <strong>15+ enterprise applications</strong> via SailPoint IIQ. Role mining consolidated cross-app business roles, reducing excessive access by <strong>30%</strong>.</li>
+        <li>Onboarded <strong>15+ applications</strong> using JDBC and Web Services connectors aligned to JML lifecycle. Reduced manual access requests by <strong>40%</strong>.</li>
+        <li>Automated access review reports saving <strong>15+ hours per certification cycle</strong>. Ensured SOC Type II &amp; SOX audit alignment across all identity workflows.</li>
+        <li>Resolved <strong>120+ IAM tickets monthly</strong>. Led RCA on P1/P2 identity incidents, reducing MTTR by 20%.</li>
+        <li>Built multi-step <strong>Agentic AI triage bot (LangChain + Anthropic API)</strong> to auto-process Microsoft Sentinel alerts — 35% reduction in triage time.</li>
+        <li>Implemented <strong>KQL detection rules</strong> in Microsoft Sentinel and coordinated IAM audit log integration for compliance reporting.</li>
+      </ul>
+      <div class="impact-row">
+        <span class="impact-chip b">↓ 40% manual provisioning</span>
+        <span class="impact-chip g">↓ 30% excessive access</span>
+        <span class="impact-chip b">98.5% SLA maintained</span>
+        <span class="impact-chip g">↓ 35% AI triage time</span>
+        <span class="impact-chip p">120+ tickets/mo resolved</span>
+        <span class="impact-chip b">↓ 20% MTTR</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PROJECTS -->
+<section id="projects" class="section">
+  <div class="s-label reveal">04 / Projects</div>
+  <h2 class="s-title reveal">Key <em>Initiatives</em></h2>
+  <div class="proj-grid">
+    <div class="proj-card reveal"><div class="proj-type">SailPoint ISC</div><div class="proj-title">App Onboarding & Automated Provisioning</div><div class="proj-desc">Implemented onboarding in SailPoint Identity Security Cloud using Web Services (REST) and JDBC connectors. Configured JML lifecycle flows, mapped roles/entitlements, and standardized audit-ready runbooks.</div><div><span class="proj-impact">↓ 40% manual requests · ↓ 25% errors</span></div><div class="proj-tech"><span>SailPoint ISC</span><span>REST</span><span>JDBC</span><span>JML</span><span>Runbooks</span></div></div>
+    <div class="proj-card reveal" style="transition-delay:.06s"><div class="proj-type">SailPoint IIQ</div><div class="proj-title">Authorization & Role Mining Implementation</div><div class="proj-desc">Designed authorization concepts for 15+ enterprise apps. Role mining identified and consolidated business roles. BeanShell/Java rules and JavaScript workflows for provisioning and access certifications.</div><div><span class="proj-impact">↓ 30% excessive access enterprise-wide</span></div><div class="proj-tech"><span>SailPoint IIQ</span><span>Java</span><span>BeanShell</span><span>LDAP</span><span>Active Directory</span></div></div>
+    <div class="proj-card reveal" style="transition-delay:.12s"><div class="proj-type">Agentic AI / Security</div><div class="proj-title">AI Security Triage Bot</div><div class="proj-desc">Multi-step AI agent ingesting Microsoft Sentinel alerts and auto-drafting response playbooks. LangChain orchestration with Anthropic's Claude API for intelligent classification and priority routing.</div><div><span class="proj-impact">↓ 35% alert triage time</span></div><div class="proj-tech"><span>Python</span><span>LangChain</span><span>Anthropic API</span><span>MS Sentinel</span></div></div>
+    <div class="proj-card reveal" style="transition-delay:.18s"><div class="proj-type">IAM / SOC</div><div class="proj-title">Enterprise Incident Response Playbook</div><div class="proj-desc">Standardized P1/P2 IAM incident response framework with automated runbooks, escalation paths, and RCA templates. Coordinated with SOC to reduce mean time to resolution.</div><div><span class="proj-impact">↓ 20% MTTR on identity incidents</span></div><div class="proj-tech"><span>Python</span><span>SailPoint</span><span>SOC Ops</span><span>SIEM</span></div></div>
+    <div class="proj-card reveal" style="transition-delay:.24s"><div class="proj-type">Machine Learning</div><div class="proj-title">AI-Driven Phishing Detection System</div><div class="proj-desc">Final year capstone — ML URL classifier achieving 94%+ accuracy on phishing detection. Feature engineering and ensemble methods cut false positives by 30% vs baseline.</div><div><span class="proj-impact">94%+ accuracy · ↓ 30% false positives</span></div><div class="proj-tech"><span>Python</span><span>Scikit-learn</span><span>ML</span><span>Cyber Security</span></div></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CERTS -->
+<section id="certifications" class="section">
+  <div class="s-label reveal">05 / Certifications</div>
+  <h2 class="s-title reveal">Learning & <em>Credentials</em></h2>
+  <div class="cert-grid">
+    <div class="cert-card reveal"><div class="cert-dot done"></div><div><div class="cert-name">Oracle Generative AI Professional</div><div class="cert-state">Completed ✓</div></div></div>
+    <div class="cert-card reveal"><div class="cert-dot done"></div><div><div class="cert-name">CISCO Networking Essentials</div><div class="cert-state">Completed ✓</div></div></div>
+    <div class="cert-card reveal"><div class="cert-dot done"></div><div><div class="cert-name">EC-Council — SQL Injection Defense</div><div class="cert-state">Completed ✓</div></div></div>
+    <div class="cert-card reveal"><div class="cert-dot wip"></div><div><div class="cert-name">CompTIA Security+</div><div class="cert-state">In Progress...</div></div></div>
+    <div class="cert-card reveal"><div class="cert-dot wip"></div><div><div class="cert-name">AWS Cloud Practitioner</div><div class="cert-state">In Progress...</div></div></div>
+    <div class="cert-card reveal"><div class="cert-dot wip"></div><div><div class="cert-name">LangChain AI Developer Course</div><div class="cert-state">In Progress...</div></div></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CONTACT -->
+<section id="contact" class="section">
+  <div class="s-label reveal">06 / Contact</div>
+  <h2 class="s-title reveal">Let's <em>Connect</em></h2>
+  <p class="reveal" style="color:var(--muted);margin-bottom:2rem;max-width:440px;font-size:.93rem">Open to IAM engineering roles, SailPoint consulting, and Agentic AI security projects.</p>
+  <div class="contact-grid">
+    <a href="mailto:chetangajbe4@gmail.com" class="con-card reveal"><div class="con-icon">✉️</div><div><div class="con-l">Email</div><div class="con-v">chetangajbe4@gmail.com</div></div></a>
+    <a href="tel:+918530043958" class="con-card reveal" style="transition-delay:.05s"><div class="con-icon">📞</div><div><div class="con-l">Phone</div><div class="con-v">+91 85300 43958</div></div></a>
+    <a href="https://github.com/chetangajbe" target="_blank" class="con-card reveal" style="transition-delay:.1s"><div class="con-icon">🐙</div><div><div class="con-l">GitHub</div><div class="con-v">chetangajbe</div></div></a>
+  </div>
+</section>
+
+</div><!-- /content -->
+
+<footer>
+  <p>Chetan Gajbe &nbsp;·&nbsp; SailPoint Developer &amp; IAM/IGA Engineer &nbsp;·&nbsp; Hyderabad, India</p>
+  <p style="margin-top:.5rem;opacity:.5">Securing identities · Automating access · Building with AI</p>
+</footer>
+
+<script>
+// ── BG CANVAS: hex network ──
+const bgC=document.getElementById('bgCanvas'),bgCtx=bgC.getContext('2d');
+let W,H,pts=[];
+function resize(){W=bgC.width=window.innerWidth;H=bgC.height=window.innerHeight}
+resize();window.addEventListener('resize',resize);
+class Pt{constructor(){this.x=Math.random()*W;this.y=Math.random()*H;this.vx=(Math.random()-.5)*.3;this.vy=(Math.random()-.5)*.3;this.r=Math.random()*1.2+.4;this.a=Math.random()*.4+.1}
+update(){this.x+=this.vx;this.y+=this.vy;if(this.x<0||this.x>W)this.vx*=-1;if(this.y<0||this.y>H)this.vy*=-1}}
+for(let i=0;i<80;i++)pts.push(new Pt());
+function drawBg(){
+  bgCtx.clearRect(0,0,W,H);
+  pts.forEach(p=>{p.update();bgCtx.beginPath();bgCtx.arc(p.x,p.y,p.r,0,Math.PI*2);bgCtx.fillStyle=`rgba(59,130,246,${p.a})`;bgCtx.fill()});
+  for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){
+    const dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.sqrt(dx*dx+dy*dy);
+    if(d<140){bgCtx.beginPath();bgCtx.moveTo(pts[i].x,pts[i].y);bgCtx.lineTo(pts[j].x,pts[j].y);bgCtx.strokeStyle=`rgba(59,130,246,${.06*(1-d/140)})`;bgCtx.lineWidth=.5;bgCtx.stroke()}
+  }
+  requestAnimationFrame(drawBg);
+}
+drawBg();
+
+// ── IAM DIAGRAM NODES ──
+const nodes=[
+  {label:'RBAC\nROLES',icon:'🔑',angle:0},
+  {label:'JOINER\nMOVER',icon:'👤',angle:60},
+  {label:'ACTIVE\nDIRECTORY',icon:'🏢',angle:120},
+  {label:'ACCESS\nCERTS',icon:'📋',angle:180},
+  {label:'AZURE\nAD',icon:'☁️',angle:240},
+  {label:'SENTINEL\nSIEM',icon:'🔭',angle:300},
+];
+const diag=document.getElementById('iamDiagram');
+const svg=document.getElementById('iamSvg');
+const cx=210,cy=210,radius=155;
+nodes.forEach((n,i)=>{
+  const rad=n.angle*Math.PI/180;
+  const nx=cx+radius*Math.cos(rad);
+  const ny=cy+radius*Math.sin(rad);
+  // node div
+  const div=document.createElement('div');
+  div.className='iam-node';
+  div.style.cssText=`left:${nx-36}px;top:${ny-28}px;position:absolute;`;
+  div.innerHTML=`<div class="iam-node-box"><span style="font-size:1.1rem">${n.icon}</span><span style="font-size:.5rem;line-height:1.3;text-align:center">${n.label}</span></div>`;
+  diag.appendChild(div);
+  // SVG line
+  const line=document.createElementNS('http://www.w3.org/2000/svg','line');
+  line.setAttribute('x1',cx);line.setAttribute('y1',cy);
+  line.setAttribute('x2',nx);line.setAttribute('y2',ny);
+  line.setAttribute('stroke','rgba(59,130,246,0.25)');
+  line.setAttribute('stroke-width','1');
+  line.setAttribute('stroke-dasharray','4 4');
+  svg.appendChild(line);
+  // animated packet on line
+  const circle=document.createElementNS('http://www.w3.org/2000/svg','circle');
+  circle.setAttribute('r','3');
+  circle.setAttribute('fill','#00e5a0');
+  circle.style.filter='drop-shadow(0 0 4px #00e5a0)';
+  svg.appendChild(circle);
+  const anim=document.createElementNS('http://www.w3.org/2000/svg','animateMotion');
+  anim.setAttribute('dur',`${2+i*0.5}s`);
+  anim.setAttribute('repeatCount','indefinite');
+  anim.setAttribute('begin',`${i*0.4}s`);
+  const mpath=document.createElementNS('http://www.w3.org/2000/svg','mpath');
+  // use path for animation
+  const pathEl=document.createElementNS('http://www.w3.org/2000/svg','path');
+  const pid=`p${i}`;
+  pathEl.setAttribute('id',pid);
+  pathEl.setAttribute('d',`M${cx} ${cy} L${nx} ${ny}`);
+  pathEl.setAttribute('fill','none');
+  svg.appendChild(pathEl);
+  mpath.setAttributeNS('http://www.w3.org/1999/xlink','href',`#${pid}`);
+  anim.appendChild(mpath);
+  circle.appendChild(anim);
+});
+
+// ── TERMINAL TYPEWRITER ──
+const cmd='cat chetan.profile.json';
+const cmdEl=document.getElementById('typedCmd');
+const outEl=document.getElementById('termOutput');
+let ci=0;
+setTimeout(()=>{
+  const t=setInterval(()=>{
+    if(ci<cmd.length){cmdEl.textContent+=cmd[ci++]}
+    else{clearInterval(t);document.getElementById('termCursor').style.display='none';setTimeout(()=>{outEl.style.display='block'},300)}
+  },60);
+},1000);
+
+// ── SCROLL REVEAL ──
+const revEls=document.querySelectorAll('.reveal');
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.classList.add('visible');
+      e.target.querySelectorAll('.count').forEach(c=>animCount(c));
+      e.target.querySelectorAll('.sb-fill').forEach(b=>{b.style.width=b.dataset.w+'%'});
+      obs.unobserve(e.target);
+    }
+  });
+},{threshold:.12});
+revEls.forEach(el=>obs.observe(el));
+
+// also watch bars independently
+document.querySelectorAll('.sb-fill').forEach(b=>{
+  const o2=new IntersectionObserver(en=>{if(en[0].isIntersecting){b.style.width=b.dataset.w+'%';o2.unobserve(b)}},{threshold:.3});
+  o2.observe(b);
+});
+
+// ── COUNT UP ──
+function animCount(el){
+  const target=parseInt(el.dataset.t),suffix=el.dataset.s||'';
+  let v=0;const dur=1800,step=16,inc=target/(dur/step);
+  const t=setInterval(()=>{v=Math.min(v+inc,target);el.textContent=Math.floor(v).toLocaleString()+(v>=target?suffix:'');if(v>=target)clearInterval(t)},step);
+}
+new IntersectionObserver(en=>{if(en[0].isIntersecting)document.querySelectorAll('.count').forEach(animCount)},{threshold:.5}).observe(document.querySelector('.stats-row'));
+</script>
+</body>
+</html>
